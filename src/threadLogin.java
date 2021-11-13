@@ -1,4 +1,6 @@
 import java.io.*;
+import java.math.BigInteger;
+import java.security.*;
 import java.util.*;
 import java.net.*;
 
@@ -59,34 +61,34 @@ ServerPointer = new File(PathPointer);
 ServerPointer.mkdir();
 }  
   
- 
-while(true) { 
+  
 
 	System.out.println("First loop"); 
   inputMessage = in.readLine();
-   
+
+	 AES256 encoder = new AES256();
   
   String outputMessage =null;
   outputMessage = String.valueOf(inputMessage); 
-  String token[] = inputMessage.split(" "); 
+ 
   System.out.println(inputMessage+ "Connected!");
 
 	out.write(inputMessage+"\n");
 	out.flush();
   if(inputMessage.equalsIgnoreCase("0")) {
- 
-	  break;
+  
   }
   else if( inputMessage.equals("1"))  
   {  
 		   inputMessage = in.readLine();  
+		   System.out.println("Client send1: "+inputMessage);
 		   path = Paths.get(PathPointer+"/"+inputMessage);
 		   System.out.println(path +" "+ Files.exists(path)+ inputMessage);
 		   if(!Files.exists(path)) {  
 			   out.write("ENID"+"\n");
 			   out.flush();  
 		   } 
-		   else
+		   else 
 		   {  
 			   out.write("CRID"+"\n");
 			   System.out.println("ID is correct as "+ inputMessage);
@@ -97,24 +99,33 @@ try {
 	   File UID = new File(PathPointer+"/"+inputMessage+"/data.txt");
 	   inputMessage = in.readLine(); 
 	   FileReader pw = new FileReader(UID);
-	   BufferedReader pwReader = new BufferedReader(pw);
-	   String pwLine = pwReader.readLine().substring(3);
-
-	   String ptoken[] = inputMessage.split(" ");
-
-	   System.out.println(pwLine+" "+pwLine.length()+"|"+inputMessage+" "+ptoken.length + ptoken[1]+"+"+ptoken[1].length()+pwLine.equals(ptoken[1])); 
-	   System.out.println("PW : "+ ptoken[1]+" \nUI: "+inputMessage); 
-	   if(pwLine.equals(ptoken[1]))
+	   BufferedReader pwReader = new BufferedReader(pw); 
+	    
+ 
+    String pwLine = pwReader.readLine();
+ 
+	   String ptoken[] = inputMessage.split(" "); 
+	   System.out.println("Client send2: "+inputMessage);
+	   System.out.println(inputMessage+ " TK1: " +ptoken[0]+ "TK2:"+ ptoken[1]);	 
+	   String pwstring = encoder.encrypt(ptoken[1]);
+//System.out.println("Test as: +"+pwLine+"to" +encoder.decrypt(pwLine)+ "|" + " to "+encoder.decrypt(pwstring)+ " was " + pwstring);
+//	   System.out.println(pwLine+" "+pwLine.length()+"|"+pwstring+" "+pwstring.length()+ " " +pwstring.equals(ptoken[1])); 
+//	   System.out.println(encoder.decrypt(pwLine)+"line"+encoder.decrypt(pwLine).length()+" "+encoder.decrypt(pwstring) +"as "+encoder.decrypt(pwstring).length()+ " "+encoder.decrypt(pwLine).equals(encoder.decrypt(pwstring)) +"is win?" + encoder.decrypt(pwLine).equals(encoder.decrypt(pwstring)));
+//for(int i=0; i<encoder.decrypt(pwLine).length();i++)
+//{
+//	System.out.println(i+"th : "+encoder.decrypt(pwLine).charAt(i));
+//}for(int i=0; i<encoder.decrypt(pwstring).length();i++)
+//{
+//	System.out.println(i+"st : "+encoder.decrypt(pwstring).charAt(i));
+//}
+	   if(encoder.decrypt(pwLine).equals(encoder.decrypt(pwstring))==true)
 	   {
-
 		   System.out.println("Login complete as ID of "+ UserID);
-
 		   out.write("LEND "+UserID+"\n");  
 		   out.flush();    
 	   }
 	   else
 	   {
-
 		   out.write("ENPW"+"\n");
 		   out.flush();   
 	   }
@@ -134,7 +145,6 @@ finally{
   }
   else if( inputMessage.equals("2"))  
   {
-
 	   inputMessage = in.readLine();  
 	   path = Paths.get(PathPointer+"/"+inputMessage);
 	   System.out.println(path +" "+ Files.exists(path)+ inputMessage);
@@ -153,26 +163,28 @@ finally{
 try {
 
    UID = new File(PathPointer+"/"+inputMessage+"/data.txt");
-  UID.createNewFile();
- 
-  PrintWriter UWriter = new PrintWriter(new FileWriter(UID)); 
-  do { 
-	  inputMessage = in.readLine();  
-  UWriter.println(inputMessage);  
+  UID.createNewFile(); 
+
+  inputMessage = in.readLine();   
+  PrintWriter UWriter = new PrintWriter(new FileWriter(UID));  
+	  String pwEcd = encoder.encrypt(inputMessage);
+
+	 		
+  UWriter.println(pwEcd);  
+  UWriter.close();
   System.out.println(inputMessage+" Printed!");
   out.write("CIID"+"\n");  
   out.flush();
-	  
-  		}while(!inputMessage.equals("CIIE"));  
-  UWriter.close();
+ 
+  
+	   
 	   }catch(IOException e) {
-		   e.printStackTrace();
+		     e.printStackTrace();
 	   }finally {
 		   
 	   }
 	   }
-  }
-} 
+  } 
   }catch(Exception e){ 
 	  e.printStackTrace();
 	}finally{ 
