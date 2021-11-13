@@ -1,27 +1,49 @@
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.io.*;
+import java.net.*;
+import java.util.Scanner;
 
 public class game_server {
-    public static void main(String[] args) throws IOException {
-        ServerSocket serverSocket = new ServerSocket(2000);
-        Socket socket = null;
-        while (true) {
-            //listening for client 1
-            System.out.println("waiting client 1...........");
-            socket = serverSocket.accept();
-            game_client c1 = new game_client(socket);
-            System.out.println("client 1 joined..........");
 
-            //listening for client2
-            System.out.println("waiting client 2...........");
-            socket = serverSocket.accept();
-            game_client c2 = new game_client(socket);
-            System.out.println("client 2 joined..........");
+	public static void main(String[] args) {
+		ServerSocket listener = null;
 
-            //starting game with the clients
-            game_function run = new game_function();
-            run.game();
-        }
-    }
+		Scanner inputstream = null;
+
+		int nPort = 0;
+		try {
+			inputstream = new Scanner(new File("server_info.dat"));
+			String newInput = inputstream.nextLine();
+			newInput = inputstream.nextLine();
+			nPort = Integer.valueOf(newInput.substring(newInput.indexOf(" ") + 1));
+
+		} catch (FileNotFoundException e) {
+			nPort = 1024;
+		}
+		try {
+			listener = new ServerSocket(nPort);
+
+			while (true) {
+				try {
+
+					System.out.println("Waitting Clients...\n");
+					Socket client = listener.accept();
+					System.out.println("One client connected! \n");
+					game_thread user = new game_thread(client);
+					user.start();
+				} catch (Exception e) {
+
+				} finally {
+
+				}
+			}
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		} finally {
+			try {
+				listener.close();
+			} catch (IOException e) {
+			} finally {
+			}
+		}
+	}
 }
