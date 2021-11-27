@@ -58,7 +58,7 @@ Error.setSize(125,30);
 
 class PanelRegister extends JPanel{  
 private PanelMain Main;
-private JTextArea LoginText,PWText;
+private JTextArea LoginText,PWText,UsernameText,UserEmailText ;
 	public PanelRegister(PanelMain Main) {
 		this.Main = Main;
 		
@@ -81,18 +81,17 @@ JLabel PWHINT = new JLabel("PW\t:");
 PWHINT.setBounds(10,30,30,20);
 add(PWHINT);
 
-
-JTextArea UsernameText = new JTextArea();
+  UsernameText = new JTextArea();
 UsernameText.setSize(100,20);
 UsernameText.setLocation(80,55);
 UsernameText.setText("Username");
 add(UsernameText);
-JLabel UsernameHINT = new JLabel("Username:");
+  JLabel UsernameHINT = new JLabel("Username:");
 UsernameHINT.setBounds(10,55,1000,20);
 add(UsernameHINT);
  
 
-JTextArea UserEmailText = new JTextArea();
+  UserEmailText = new JTextArea();
 UserEmailText.setSize(100,20);
 UserEmailText .setLocation(80,80);
 UserEmailText .setText("Email");
@@ -198,16 +197,38 @@ RegisterButton.addActionListener(new RegisterListener());
 							 {	 
 								 // If Using GUI, We should change it to button...
 								 System.out.println("Error : Same ID already exists.");   
+								 
+								 // TODO : Make error GUI 
 								 }
 							 else // ID created, so PW Need to be created. 
 							 { 
-								 inputMessage = PWText.getText();
-							 System.out.println(inputMessage +" Sended");  
-							 out.write(inputMessage+"\n");
+								 outputMessage = PWText.getText();
+							 System.out.println(outputMessage +" Sended as pw");  
+							 out.write(outputMessage+"\n");
 							 out.flush(); 
+							 
 							 inputMessage = in.readLine(); // wait server to ready instruction
 							 System.out.println(inputMessage +" received!!!!!");  
 						/// ... like this, repeat until required data received. after this, send this. 
+							 
+
+							 outputMessage = UsernameText.getText();
+						 System.out.println(outputMessage +" Sended (UN)");  
+						 out.write(outputMessage+"\n");
+						 out.flush(); 
+						 
+						 inputMessage = in.readLine(); // wait server to ready instruction
+						 System.out.println(inputMessage +" received!!!!!");  
+
+						 outputMessage = UserEmailText.getText(); 
+					 System.out.println(outputMessage +" Sended as email");  
+					 out.write(outputMessage+"\n");
+					 out.flush(); 
+					 
+					 inputMessage = in.readLine(); // wait server to ready instruction
+					 System.out.println(inputMessage +" received!!!!!");  
+							 
+							 
 							 out.write("CIIE\n"); // completed Inserting Inputs Ended
 							 out.flush();
 							 }
@@ -230,7 +251,7 @@ RegisterButton.addActionListener(new RegisterListener());
 		{
 			Main.setSize(260,120);
 			Main.setLocationRelativeTo(null);
-			Main.changeTo("Register");
+			Main.changeTo("login");
 			
 		}
 	}
@@ -282,7 +303,7 @@ RegisterButton.addActionListener(new RegisterListener());
 			{    
 				Main.setSize(200,220);
 				Main.setLocationRelativeTo(null);
-				Main.changeTo("PanelLogin");
+				Main.changeTo("register");
 			}
 		}
 		class LoginListener implements ActionListener{
@@ -427,18 +448,15 @@ RegisterButton.addActionListener(new RegisterListener());
 						try {
 							socket.close(); 
 						} catch (Exception e2) { 
-
-							Main.setSize(200,220);
-							Main.setLocationRelativeTo(null);
-							Main.changeTo("PanelLogin");
+ 
+							Main.setLocationRelativeTo(null); 
 							System.out.println("Error: Currently server hasn't opened / or having connection problem. check your IP address. ");
 						}
 						finally
 						{
-
-							Main.setSize(200,220);
+ 
 							Main.setLocationRelativeTo(null);
-							Main.changeTo("PanelLogin");
+							Main.changeTo("login");
 						}
  
 					}
@@ -462,12 +480,12 @@ class PanelMain extends JFrame{
 			revalidate();
 			repaint();
 		}
-		else		if(target.equals("PanelLogin"))
+		else		if(target.equals("login"))
 		{
 			getContentPane().removeAll();
  
 			
-			getContentPane().add(register); 
+			getContentPane().add(login); 
 			revalidate();
 			repaint();
 		}
@@ -483,7 +501,7 @@ class PanelMain extends JFrame{
 		{
 			getContentPane().removeAll();
 			getContentPane().setSize(500,500);
-			getContentPane().add(login); 
+			getContentPane().add(register); 
 			revalidate();
 			repaint();
 		}

@@ -117,7 +117,7 @@ try {
 //}for(int i=0; i<encoder.decrypt(pwstring).length();i++)
 //{
 //	System.out.println(i+"st : "+encoder.decrypt(pwstring).charAt(i));
-//}
+//} TODO: USER ERROR / LOGIN sequence implement
 	   if(encoder.decrypt(pwLine).equals(encoder.decrypt(pwstring))==true)
 	   {
 		   System.out.println("Login complete as ID of "+ UserID);
@@ -171,6 +171,23 @@ try {
 
 	 		
   UWriter.println(pwEcd);  
+
+  System.out.println(inputMessage+" Printed!");
+  out.write("PWDN"+"\n");   // password done
+  out.flush();
+  
+  inputMessage = in.readLine();   
+  UWriter.println(inputMessage);  
+  System.out.println(inputMessage+" Printed!");
+  out.write("UNDN"+"\n");   // Username done
+  out.flush();
+
+  inputMessage = in.readLine();   
+  UWriter.println(inputMessage);   
+  out.write("EMDN"+"\n");   // Email done
+  out.flush();
+  
+  
   UWriter.close();
   System.out.println(inputMessage+" Printed!");
   out.write("CIID"+"\n");  
