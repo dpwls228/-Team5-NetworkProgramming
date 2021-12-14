@@ -123,7 +123,7 @@ try {
 		   System.out.println("Login complete as ID of "+ UserID);
 		   out.write("LEND "+UserID+"\n");  
 		   out.flush();    
-		   out.write("LEND UI:"+UserID+" Email: "+pwReader.readLine() +"Username: "+pwReader.readLine() +"\n");  
+		   out.write("LEND UI:"+UserID+" Email: "+pwReader.readLine() +" Username: "+pwReader.readLine() +"\n");  
 		   out.flush();    
 	   }
 	   else

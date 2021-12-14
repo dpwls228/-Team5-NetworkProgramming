@@ -329,9 +329,15 @@ private JTextArea LoginText,PWText;
 							 {
 							 	 System.out.println(token[1]+" received: Login complete.");
 							 	 inputMessage = in.readLine(); // Get another information from server!
-								 System.out.println(inputMessage +" received");   // 
-									  
-							 }
+								 System.out.println(inputMessage +" received!");   // 
+									  String Results[] = inputMessage.split(" ");
+									  for(int i=0;i<Results.length;i++)
+									  {
+										  System.out.println(i+" "+Results[i].toString());
+									  }
+									  // Results[3] = username /  Results[5] = email // Socket = socket
+									  System.out.println("username : "+Results[3]+ "\n email: "+ Results[5]);
+							 } 
 						 }
 				} catch (IOException e1) { 
 					} finally {
