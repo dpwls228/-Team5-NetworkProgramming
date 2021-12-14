@@ -131,68 +131,43 @@ RegisterButton.addActionListener(new RegisterListener());
 					Main.changeTo("Login");
 
 					socket.close();
-				}
-				  
-				while(true)
-				{	  
-					System.out.println("First loop");
-					outputMessage = String.valueOf(2);
-					 System.out.println(outputMessage +" Sended");   
+				} 
+					outputMessage = String.valueOf(2); 
 					 out.write(outputMessage+"\n"); 
 					 out.flush();
-
-					 System.out.println(" waitting for response...");   
-				 inputMessage = in.readLine();  
-				 System.out.println(inputMessage +" responsed by server");     
-					 if(inputMessage.equals("2")) 
-					 {	 System.out.println(inputMessage +" received: Send ID ");  
-							outputMessage = LoginText.getText();
-							 System.out.println(outputMessage +" Sended");  
+ 				 inputMessage = in.readLine();  // wait for response    
+					 if(inputMessage.equals("2"))  // server sended it : means requirs ID input
+					 {	 
+							outputMessage = LoginText.getText(); //Send server ID 
 							 out.write(outputMessage+"\n");
 							 out.flush(); 
-							 inputMessage = in.readLine(); // wait server to ready instruction
-							 System.out.println(inputMessage +" received");  
-							 if(inputMessage.equals("EIDE"))
+							 
+							 inputMessage = in.readLine(); // wait server to ready instruction 
+							 if(inputMessage.equals("EIDE")) // EIDE : Error: ID already EXists!
 							 {	 
-								 // If Using GUI, We should change it to button...
+								 // Do Nothing due to Error , But not crash itself
 								 System.out.println("Error : Same ID already exists.");   
 								  
 								 }
-							 else // ID created, so PW Need to be created. 
+							 else // ID doesn't exist so created ID, so PW Need to be created. 
 							 { 
-								 outputMessage = PWText.getText();
-							 System.out.println(outputMessage +" Sended as pw");  
-							 out.write(outputMessage+"\n");
-							 out.flush(); 
-							 
-							 inputMessage = in.readLine(); // wait server to ready instruction
-							 System.out.println(inputMessage +" received!!!!!");  
-						/// ... like this, repeat until required data received. after this, send this. 
-							 
-
-							 outputMessage = UsernameText.getText();
-						 System.out.println(outputMessage +" Sended (UN)");  
-						 out.write(outputMessage+"\n");
-						 out.flush(); 
-						 
-						 inputMessage = in.readLine(); // wait server to ready instruction
-						 System.out.println(inputMessage +" received!!!!!");  
-
-						 outputMessage = UserEmailText.getText(); 
-					 System.out.println(outputMessage +" Sended as email");  
-					 out.write(outputMessage+"\n");
-					 out.flush(); 
-					 
-					 inputMessage = in.readLine(); // wait server to ready instruction
-					 System.out.println(inputMessage +" received!!!!!");  
-							 
-							 
-							 out.write("CIIE\n"); // completed Inserting Inputs Ended
-							 out.flush();
+								 outputMessage = PWText.getText(); 
+								 out.write(outputMessage+"\n"); // Send PW to server
+								 out.flush(); 
+								 inputMessage = in.readLine(); // wait server to ready instruction   
+								 outputMessage = UsernameText.getText(); // after receive server's response, give it Username 
+								 out.write(outputMessage+"\n");
+								 out.flush(); 
+								 inputMessage = in.readLine(); // wait server to ready instruction  
+								 outputMessage = UserEmailText.getText(); // give server User Email. 
+								 out.write(outputMessage+"\n"); 
+								 out.flush(); 
+								 inputMessage = in.readLine(); // wait server to ready instruction 
+								 out.write("CIIE\n"); // completed Inserting Inputs Ended
+								 out.flush();
 							 }
-					 }
-				}
-				} catch (IOException e3) { 
+					 	}
+					 } catch (IOException e3) { 
 				} finally {
 					try {
 						socket.close(); 
@@ -218,44 +193,44 @@ class PanelLogin extends JPanel {
 private PanelMain Main;
 private JTextArea LoginText,PWText;
 	public PanelLogin(PanelMain Main) {
-		this.Main = Main; 
-		setLayout(null);
-		  LoginText = new JTextArea();
-		LoginText.setSize(100,20);
-LoginText.setLocation(45,10);
-LoginText.setText("ID");
-add(LoginText);
+			this.Main = Main; 
+			setLayout(null);
+			LoginText = new JTextArea();
+			LoginText.setSize(100,20);
+			LoginText.setLocation(45,10);
+			LoginText.setText("ID");
+			add(LoginText);
 
-JLabel IDHINT = new JLabel("ID:");
-IDHINT.setBounds(10,10,50,20);
-add(IDHINT);
+			JLabel IDHINT = new JLabel("ID:");
+			IDHINT.setBounds(10,10,50,20);
+			add(IDHINT);
 
- PWText = new JTextArea();
-		PWText.setSize(100,20);
-		PWText.setLocation(45,40);
-		PWText.setText("PW");
-		add(PWText);
+			PWText = new JTextArea();
+			PWText.setSize(100,20);
+			PWText.setLocation(45,40);
+			PWText.setText("PW");
+			add(PWText);
 
-JLabel PWHINT = new JLabel("PW\t:");
-PWHINT.setBounds(10,40,30,20);
-add(PWHINT);
+			JLabel PWHINT = new JLabel("PW\t:");
+			PWHINT.setBounds(10,40,30,20);
+			add(PWHINT);
 
-		JButton LoginButton = new JButton("Login"); 
-		LoginButton.setSize(90,30);
-		LoginButton.setLocation(150,5);
-		LoginButton.addActionListener(new LoginListener());
-		add(LoginButton);
+			JButton LoginButton = new JButton("Login"); 
+			LoginButton.setSize(90,30);
+			LoginButton.setLocation(150,5);
+			LoginButton.addActionListener(new LoginListener());
+			add(LoginButton);
 		
-		JButton RegisterButton = new JButton("Register"); 
-		RegisterButton.setSize(90,30);
-		RegisterButton.setLocation(150,40);
-RegisterButton.addActionListener(new RegisterListener());
-		add(RegisterButton);
+			JButton RegisterButton = new JButton("Register"); 
+			RegisterButton.setSize(90,30);
+			RegisterButton.setLocation(150,40);
+			RegisterButton.addActionListener(new RegisterListener());
+			add(RegisterButton);
 		
 	}
 
 		
-		class RegisterListener implements ActionListener{
+	class RegisterListener implements ActionListener{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{    
@@ -272,29 +247,30 @@ RegisterButton.addActionListener(new RegisterListener());
 				BufferedReader stin = null;
 				BufferedWriter out = null;
 		 
-		Socket socket =null; 
-				 Scanner inputstream = null;
+				Socket socket =null; 
+				Scanner inputstream = null;
 
-		String serverIP=null;
-		int nPort =0;
+				String serverIP=null;
+				int nPort =0;
 
 				 try
 				 { 
-				inputstream = new Scanner(new File("server_info.dat"));  
-				 String newInput = inputstream.nextLine();
-				 serverIP=newInput.substring(newInput.indexOf(" ")+1);
-				 newInput = inputstream.nextLine();
-				 nPort = Integer.valueOf(  newInput.substring(newInput.indexOf(" ")+1)); 
+					 inputstream = new Scanner(new File("server_info.dat"));  
+					 String newInput = inputstream.nextLine();
+					 serverIP=newInput.substring(newInput.indexOf(" ")+1);
+					 newInput = inputstream.nextLine();
+					 nPort = Integer.valueOf(  newInput.substring(newInput.indexOf(" ")+1)); 
 				 
 				 
 				 }catch(FileNotFoundException e1)
 				 { 
-				 serverIP=  "localhost";
-				 nPort = 1024;
+					 serverIP=  "localhost";
+					 nPort = 1024;
 					}
 				  
 				try
-				{ socket = new Socket(serverIP,nPort);
+				{ 
+					socket = new Socket(serverIP,nPort);
 					
 					in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 					stin = new BufferedReader(new InputStreamReader(System.in));
@@ -306,9 +282,8 @@ RegisterButton.addActionListener(new RegisterListener());
 					out.write("HELLO\n");
 					out.flush();
 					inputMessage = in.readLine();
-					if(inputMessage.equals("WELCOME")) // 받은 문자가 
-					{
-						System.out.println("Welcome! 0): Leave\n1)Login\n2)Register\n");
+					if(inputMessage.equals("WELCOME")) 
+					{ 
 
 					}
 					else
@@ -316,52 +291,38 @@ RegisterButton.addActionListener(new RegisterListener());
 						System.out.println("ERROR: The server is Wrong. ");
 						socket.close();
 					}
-					  
-						System.out.println("First loop");
+					   
 						outputMessage = String.valueOf(1);
 						 System.out.println(outputMessage +" Sended");   
 						 out.write(outputMessage+"\n"); 
 						 out.flush();
 
 						 System.out.println(" waitting for response...");   
-					 inputMessage = in.readLine();  
-					 System.out.println(inputMessage +" responsed by server");    
+						 inputMessage = in.readLine();  
+						 System.out.println(inputMessage +" responsed by server");    
 						 if(inputMessage.equals("0")) 
 						 {  
+						  
 						 }
 						 else if(inputMessage.equals("1")) 
-						 {	 
-							 
-							 /*
-							  * 1. Server gives Client 1 , the ready of login ( login could talk it to server )
-							  * 2. Client gives server ID and password
-							  * 3. Server finds ID, If there is no ID, SEND ENID : Error , no id 
-							  * 4. Server finds PW, if there is no PW, send EPWW : Error, wrong password 
-							  * 5. Client go first room 
-							  */ 
-								 outputMessage = LoginText.getText();
-								 System.out.println(outputMessage +" as ID Sended");  // ID Send
+						 {	  
+								 outputMessage = LoginText.getText(); 
 								 out.write(outputMessage+"\n");  // CODE and Messages
 								 out.flush();
 								 
-								 inputMessage = in.readLine(); // wait server to ready instruction
-								 System.out.println(inputMessage +" received to server.");  
+								 inputMessage = in.readLine(); // wait server to ready instruction 
 								 
 									 if(inputMessage.equalsIgnoreCase("ENID")) 
-									 {
-										 System.out.println(inputMessage +" ERROR : NO ID exists. ");   
+									 { 
 		 
 									 } 
 								 else if(inputMessage.equals("CRID"))
-								 {
-									 System.out.println(inputMessage +" : ID exists. Enter PW  "); 
+								 { 
 									 
-									 outputMessage = PWText.getText();
-									 System.out.println(outputMessage +" as PW Sended");   
+									 outputMessage = PWText.getText(); 
 									 out.write(inputMessage+" "+outputMessage+"\n");   
 									 out.flush();
-									 inputMessage = in.readLine();  
-									 System.out.println(inputMessage +" received to server.");  
+									 inputMessage = in.readLine();   
 								 } 
 									  String token[] = inputMessage.split(" ");
 							 if(token[0].equals("LEND"))
@@ -372,35 +333,7 @@ RegisterButton.addActionListener(new RegisterListener());
 									  
 							 }
 						 }
-						 else if(inputMessage.equals("2")) 
-						 {	 System.out.println(inputMessage +" received: Send ID ");  
-								outputMessage = stin.readLine();
-								 System.out.println(outputMessage +" Sended");  
-								 out.write(outputMessage+"\n");
-								 out.flush(); 
-								 inputMessage = in.readLine(); // wait server to ready instruction
-								 System.out.println(inputMessage +" received");  
-								 if(inputMessage.equals("EIDE"))
-								 {	 
-									 // If Using GUI, We should change it to button...
-									 System.out.println("Error : Same ID already exists.");   
-									 }
-								 else // ID created, so PW Need to be created. 
-								 { 
-									
-									 
-								 inputMessage = stin.readLine();  
-								 System.out.println(inputMessage +" Sended");  
-								 out.write("PW:"+inputMessage+"\n");
-								 out.flush(); 
-								 inputMessage = in.readLine(); // wait server to ready instruction
-								 System.out.println(inputMessage +" received");  
-							/// ... like this, repeat until required data received. after this, send this. 
-								 out.write("CIIE\n"); // completed Inserting Inputs Ended
-								 out.flush();
-								 }
-						 } 
-					} catch (IOException e1) { 
+				} catch (IOException e1) { 
 					} finally {
 						try {
 							socket.close(); 
@@ -469,5 +402,4 @@ public class ClientLogin extends JFrame{
   Main.setResizable(false);
 	Main.setVisible(true);  
 		}
-	}
-
+	} 
