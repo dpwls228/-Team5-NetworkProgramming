@@ -1,60 +1,21 @@
- 
-
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.*;
-import java.net.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.Socket;
 import java.util.Scanner;
-import javax.swing.*;
- // Todo: swing thread! 
-// Todo2 : Make a encode system, now. 
 
-class PanelError extends JPanel{
-	private PanelMain Main;
-	JLabel Errocu ;
-	JButton Return;
-	String prev;
-	public PanelError(PanelMain Main, String prev)
-	{
-		this.prev=prev;
-		this.Main=Main;
-		Errocu = new JLabel();
-
-		JButton Error = new JButton("Back to Login"); 
-Error.setSize(125,30);
-		Error.setLocation(25,105);
-		Error.addActionListener(new Return());
-		add(Error);
-
-	}
-
-	public PanelError(PanelMain Main)
-	{
-		this.Main=Main;
-		Errocu = new JLabel();
-
-		JButton Error = new JButton("Back to Login"); 
-Error.setSize(125,30);
-		Error.setLocation(25,105);
-		Error.addActionListener(new Return());
-		add(Error);
-
-	}
-
-	
-	class Return implements ActionListener{
-		@Override
-		public void actionPerformed(ActionEvent e)
-		{      
-		Main.changeTo("LOGIN");
-		}
-	}
-	
-}
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextArea; 
+ 
 
 class PanelRegister extends JPanel{  
 private PanelMain Main;
@@ -124,8 +85,7 @@ RegisterButton.addActionListener(new RegisterListener());
 		{      
 
 			  
-			BufferedReader in = null; 
-			BufferedReader stin = null;
+			BufferedReader in = null;  
 			BufferedWriter out = null;
 	 
 	Socket socket =null; 
@@ -152,8 +112,7 @@ RegisterButton.addActionListener(new RegisterListener());
 			try
 			{ socket = new Socket(serverIP,nPort);
 				
-				in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-				stin = new BufferedReader(new InputStreamReader(System.in));
+				in = new BufferedReader(new InputStreamReader(socket.getInputStream())); 
 				out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 				String inputMessage = null;
 		
@@ -164,16 +123,16 @@ RegisterButton.addActionListener(new RegisterListener());
 				inputMessage = in.readLine();
 				if(inputMessage.equals("WELCOME")) // 받은 문자가 
 				{
-					System.out.println("Welcome! 0): Leave\n1)Login\n2)Register\n");
-
+					System.out.println("server is correct "); 
 				}
 				else
 				{ 
 					System.out.println("ERROR: The server is Wrong. ");
+					Main.changeTo("Login");
+
 					socket.close();
 				}
-				 
-		 			int Input; 
+				  
 				while(true)
 				{	  
 					System.out.println("First loop");
@@ -197,8 +156,7 @@ RegisterButton.addActionListener(new RegisterListener());
 							 {	 
 								 // If Using GUI, We should change it to button...
 								 System.out.println("Error : Same ID already exists.");   
-								 
-								 // TODO : Make error GUI 
+								  
 								 }
 							 else // ID created, so PW Need to be created. 
 							 { 
@@ -354,15 +312,11 @@ RegisterButton.addActionListener(new RegisterListener());
 
 					}
 					else
-					{ 
-						/*
-						 * Todo: Make ERROR Panel  
-						 */
+					{  
 						System.out.println("ERROR: The server is Wrong. ");
 						socket.close();
 					}
-					 
-			 			int Input;  
+					  
 						System.out.println("First loop");
 						outputMessage = String.valueOf(1);
 						 System.out.println(outputMessage +" Sended");   
@@ -412,7 +366,10 @@ RegisterButton.addActionListener(new RegisterListener());
 									  String token[] = inputMessage.split(" ");
 							 if(token[0].equals("LEND"))
 							 {
-							 	 System.out.println(token[1]+" received: Login complete.");  
+							 	 System.out.println(token[1]+" received: Login complete.");
+							 	 inputMessage = in.readLine(); // Get another information from server!
+								 System.out.println(inputMessage +" received");   // 
+									  
 							 }
 						 }
 						 else if(inputMessage.equals("2")) 
@@ -466,9 +423,7 @@ RegisterButton.addActionListener(new RegisterListener());
 
 class PanelMain extends JFrame{
 	public PanelLogin login = null;
-	public PanelRegister register = null;
-	public PanelError error = null;
-	
+	public PanelRegister register = null;  
 	public void changeTo(String target)
 	{
 		if(target == null)
@@ -488,15 +443,7 @@ class PanelMain extends JFrame{
 			getContentPane().add(login); 
 			revalidate();
 			repaint();
-		}
-		else if(target.endsWith("ERROR"))
-		{
-			getContentPane().removeAll();
-			getContentPane().add(error); 
-			revalidate();
-			repaint();
-			
-		}
+		} 
 		else
 		{
 			getContentPane().removeAll();
@@ -514,148 +461,13 @@ public class ClientLogin extends JFrame{
   PanelMain Main = new PanelMain();
   Main.setTitle("Login");
   Main.login= new PanelLogin(Main);
-  Main.register = new PanelRegister(Main);
-  Main.error = new PanelError(Main);
+  Main.register = new PanelRegister(Main); 
   Main.add(Main.login);
   Main.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
   Main.setSize(260,120); 
   Main.setLocationRelativeTo(null);
   Main.setResizable(false);
-	Main.setVisible(true); 
-   /*
-   
-		BufferedReader in = null; 
-		BufferedReader stin = null;
-		BufferedWriter out = null;
- 
-Socket socket =null; 
-		 Scanner inputstream = null;
-
-String serverIP=null;
-int nPort =0;
-
-		 try
-		 { 
-		inputstream = new Scanner(new File("server_info.dat"));  
-		 String newInput = inputstream.nextLine();
-		 serverIP=newInput.substring(newInput.indexOf(" ")+1);
-		 newInput = inputstream.nextLine();
-		 nPort = Integer.valueOf(  newInput.substring(newInput.indexOf(" ")+1)); 
-		 
-		 
-		 }catch(FileNotFoundException e)
-		 { 
-		 serverIP=  "localhost";
-		 nPort = 1024;
-			}
-		  
-		try
-		{ socket = new Socket(serverIP,nPort);
-			
-			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			stin = new BufferedReader(new InputStreamReader(System.in));
-			out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-			String inputMessage = null;
-	
-			String outputMessage;
-
-			out.write("HELLO\n");
-			out.flush();
-			inputMessage = in.readLine();
-			if(inputMessage.equals("WELCOME")) // 받은 문자가 
-			{
-				System.out.println("Welcome! 0): Leave\n1)Login\n2)Register\n");
-
-			}
-			else
-			{ 
-				System.out.println("ERROR: The server is Wrong. ");
-				socket.close();
-			}
-			 
-	 			int Input;  
-				System.out.println("First loop");
-				outputMessage = stin.readLine();
-				 System.out.println(outputMessage +" Sended");   
-				 out.write(outputMessage+"\n"); 
-				 out.flush();
-
-				 System.out.println(" waitting for response...");   
-			 inputMessage = in.readLine();  
-			 System.out.println(inputMessage +" responsed by server");    
-				 if(inputMessage.equals("0")) 
-				 {  
-				 }
-				 else if(inputMessage.equals("1")) 
-				 {	  
-						 outputMessage = stin.readLine();
-						 System.out.println(outputMessage +" as ID Sended");  // ID Send
-						 out.write(outputMessage+"\n");  // CODE and Messages
-						 out.flush();
-						 
-						 inputMessage = in.readLine(); // wait server to ready instruction
-						 System.out.println(inputMessage +" received to server.");  
-						 
-							 if(inputMessage.equalsIgnoreCase("ENID")) 
-							 {
-								 System.out.println(inputMessage +" ERROR : NO ID exists. ");   
- 
-							 } 
-						 else if(inputMessage.equals("CRID"))
-						 {
-							 System.out.println(inputMessage +" : ID exists. Enter PW  "); 
-							 
-							 outputMessage = stin.readLine();
-							 System.out.println(outputMessage +" as PW Sended");   
-							 out.write(inputMessage+" "+outputMessage+"\n");   
-							 out.flush();
-							 inputMessage = in.readLine();  
-							 System.out.println(inputMessage +" received to server.");  
-						 } 
-							  String token[] = inputMessage.split(" ");
-					 if(token[0].equals("LEND"))
-					 {
-					 	 System.out.println(token[1]+" received: Login complete.");  
-					 }
-				 }
-				 else if(inputMessage.equals("2")) 
-				 {	 System.out.println(inputMessage +" received: Send ID ");  
-						outputMessage = stin.readLine();
-						 System.out.println(outputMessage +" Sended");  
-						 out.write(outputMessage+"\n");
-						 out.flush(); 
-						 inputMessage = in.readLine(); // wait server to ready instruction
-						 System.out.println(inputMessage +" received");  
-						 if(inputMessage.equals("EIDE"))
-						 {	 
-							 // If Using GUI, We should change it to button...
-							 System.out.println("Error : Same ID already exists.");   
-							 }
-						 else // ID created, so PW Need to be created. 
-						 {
-						 inputMessage = stin.readLine();
-						 System.out.println(inputMessage +" Sended");  
-						 out.write("PW:"+inputMessage+"\n");
-						 out.flush(); 
-						 inputMessage = in.readLine(); // wait server to ready instruction
-						 System.out.println(inputMessage +" received");  
-					/// ... like this, repeat until required data received. after this, send this. 
-						 out.write("CIIE\n"); // completed Inserting Inputs Ended
-						 out.flush();
-						 }
-				 } 
-			} catch (IOException e) { 
-			} finally {
-				try {
-					socket.close(); 
-				} catch (Exception e) {
-					System.out.println("Error: Currently server hasn't opened / or having connection problem. check your IP address. ");
-				}
-				finally {
-					
-				}
-			}
-    */
+	Main.setVisible(true);  
 		}
 	}
 
