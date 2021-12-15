@@ -118,10 +118,10 @@ RegisterButton.addActionListener(new RegisterListener());
 		
 				String outputMessage;
 
-				out.write("HELLO\n");
+				out.write("GAME\n");
 				out.flush();
 				inputMessage = in.readLine();
-				if(inputMessage.equals("WELCOME")) // 받은 문자가 
+				if(inputMessage.equals("START")) // 받은 문자가 
 				{
 					System.out.println("server is correct "); 
 				}
@@ -279,10 +279,10 @@ private JTextArea LoginText,PWText;
 			
 					String outputMessage;
 
-					out.write("HELLO\n");
+					out.write("GAME\n");
 					out.flush();
 					inputMessage = in.readLine();
-					if(inputMessage.equals("WELCOME")) 
+					if(inputMessage.equals("START")) 
 					{ 
 
 					}
@@ -310,8 +310,9 @@ private JTextArea LoginText,PWText;
 								 out.write(outputMessage+"\n");  // CODE and Messages
 								 out.flush();
 								 
-								 inputMessage = in.readLine(); // wait server to ready instruction 
 								 
+								 inputMessage = in.readLine(); // wait server to ready instruction 
+								 System.out.println("Get pw + "+inputMessage);
 									 if(inputMessage.equalsIgnoreCase("ENID")) 
 									 { 
 		 
@@ -323,6 +324,7 @@ private JTextArea LoginText,PWText;
 									 out.write(inputMessage+" "+outputMessage+"\n");   
 									 out.flush();
 									 inputMessage = in.readLine();   
+									 System.out.println("GOT?" + inputMessage);
 								 } 
 									  String token[] = inputMessage.split(" ");
 							 if(token[0].equals("LEND"))
