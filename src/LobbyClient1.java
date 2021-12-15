@@ -1,12 +1,8 @@
-package network;
+
 
 import javax.swing.*; 
 import javax.swing.event.*;
-
-import gui.MyActionListener;
-import gui.LobbyGUI;
-import gui.UsersNStartGUI;
-
+ 
 import java.awt.event.*;
 
 import java.io.*;
@@ -20,7 +16,7 @@ import java.awt.List;
 
 import java.util.*;
 
-public class LobbyClient {
+public class LobbyClient1 {
 	Socket soc = new Socket();
 	JTextArea chattingLog = new JTextArea();
 	JTextField chat = new JTextField("");
@@ -169,7 +165,7 @@ public class LobbyClient {
 		thread.start();
 	}
 	
-	public LobbyClient() {
+	public LobbyClient1() {
 		JFrame jf = new JFrame("Lobby"); // JFrame타이틀 지정
         jf.setSize(900, 600); // 창 크기 설정
         jf.setLayout(null);
@@ -246,7 +242,7 @@ public class LobbyClient {
 	}
 	
 	public static void main(String[] args) {
-		LobbyClient lc = new LobbyClient();
+		LobbyClient1 lc = new LobbyClient1();
 	}
 	
 	
